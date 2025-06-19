@@ -12,18 +12,4 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-export { db };
-
-// src/saveScore.js
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "./firebase";
-
-export async function saveScore(name, time) {
-  await addDoc(collection(db, "scores"), {
-    name,
-    time,
-    createdAt: new Date()
-  });
-}
+export const db = getFirestore(app);
