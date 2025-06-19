@@ -1,45 +1,60 @@
 import React, { useState } from "react";
-import { saveScore } from "./saveScore";
-import Leaderboard from "./Leaderboard";
 
 export default function App() {
-  const [time, setTime] = useState(null);
+  const [solved, setSolved] = useState(false);
   const [name, setName] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [time, setTime] = useState(null);
 
-  const handleFinishPuzzle = () => {
-    const randomTime = Math.floor(Math.random() * 20) + 5;
+  const handleSolve = () => {
+    const randomTime = Math.floor(Math.random() * 30) + 5;
     setTime(randomTime);
-  };
-
-  const handleSubmit = async () => {
-    await saveScore(name, time);
-    setSubmitted(true);
+    setSolved(true);
   };
 
   return (
-    <div style={{ background: "#0f0f0f", minHeight: "100vh", padding: "2rem", color: "#fff" }}>
-      <h1 style={{ color: "#FF3300" }}>🔥 Fogo Puzzle Challenge</h1>
-      {!time && (
-        <button onClick={handleFinishPuzzle} style={{ padding: "1rem", background: "#FF5C00", color: "#fff", border: "none", borderRadius: "8px" }}>
+    <div style={{ background: "#0f0f0f", color: "#fff", minHeight: "100vh", padding: "2rem", fontFamily: "Arial, sans-serif" }}>
+      <h1 style={{ color: "#FF3300", marginBottom: "1rem" }}>🔥 Fogo Puzzle Test</h1>
+
+      {!solved ? (
+        <button
+          onClick={handleSolve}
+          style={{
+            backgroundColor: "#FF5C00",
+            color: "#fff",
+            border: "none",
+            padding: "1rem 2rem",
+            fontSize: "1rem",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
           Solve Puzzle 🔥
         </button>
-      )}
-      {time && !submitted && (
-        <>
-          <p>You solved it in {time} seconds!</p>
+      ) : (
+        <div>
+          <p style={{ fontSize: "1.2rem" }}>
+            Congrats! You solved it in <strong>{time}s</strong>.
+          </p>
           <input
-            type="text"
             placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{ padding: "0.5rem", marginRight: "0.5rem" }}
+            style={{ padding: "0.5rem", marginRight: "0.5rem", borderRadius: "6px" }}
           />
-          <button onClick={handleSubmit}>Submit Score</button>
-        </>
+          <button
+            style={{
+              backgroundColor: "#FF5C00",
+              color: "#fff",
+              border: "none",
+              padding: "0.5rem 1rem",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            Submit 🔥
+          </button>
+        </div>
       )}
-      {submitted && <p>🔥 Score submitted! See the leaderboard below 👇</p>}
-      <Leaderboard />
     </div>
   );
 }
