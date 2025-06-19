@@ -2,7 +2,7 @@ const canvas = document.getElementById("puzzle");
 const ctx = canvas.getContext("2d");
 const size = 3;
 const tileSize = canvas.width / size;
-const imageCount = 3;
+const imageCount = 5;
 
 let tiles = [];
 let empty = { x: size - 1, y: size - 1 };
@@ -14,7 +14,7 @@ const clickSfx = new Audio("sounds/click.mp3");
 
 function loadRandomImage() {
   const random = Math.floor(Math.random() * imageCount) + 1;
-  img.src = `assets/fogo${random}.jpg`;
+  img.src = `assets/fogo${random}.png`;
 }
 
 function getRank(seconds) {
