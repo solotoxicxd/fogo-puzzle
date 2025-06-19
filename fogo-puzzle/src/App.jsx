@@ -1,60 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { submitScore } from "./submitScore";
+import { fetchTopScores } from "./fetchScores";
 
 export default function App() {
-  const [solved, setSolved] = useState(false);
   const [name, setName] = useState("");
-  const [time, setTime] = useState(null);
+  const [score, setScore] = useState("");
+  const [leaderboard, setLeaderboard] = useState([]);
 
-  const handleSolve = () => {
-    const randomTime = Math.floor(Math.random() * 30) + 5;
-    setTime(randomTime);
-    setSolved(true);
+  useEffect(() => {
+    fetchTopScores().then(setLeaderboard);
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!name || !score) return;
+    await submitScore(name, Number(score));
+    const updated = await fetchTopScores();
+    setLeaderboard(updated);
+    setName("");
+    setScore("");
   };
 
   return (
-    <div style={{ background: "#0f0f0f", color: "#fff", minHeight: "100vh", padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h1 style={{ color: "#FF3300", marginBottom: "1rem" }}>🔥 Fogo Puzzle Test</h1>
+    <div style={{ background: "#0f0f0f", color: "#fff", minHeight: "100vh", fontFamily: "Orbitron, sans-serif", padding: "2rem" }}>
+      <h1 style={{ color: "#FF3300", fontSize: "2.5rem" }}>🔥 Welcome to the Fogo Arena</h1>
+      <p style={{ color: "#ffae42", marginBottom: "2rem" }}>You either make the leaderboard — or you melt trying.</p>
 
-      {!solved ? (
+      <div style={{ marginBottom: "2rem" }}>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="🔥 Your Name"
+          style={{ padding: "0.75rem", borderRadius: "6px", marginRight: "0.5rem", background: "#1c1c1c", color: "#fff", border: "1px solid #333" }}
+        />
+        <input
+          type="number"
+          value={score}
+          onChange={(e) => setScore(e.target.value)}
+          placeholder="🔥 Your Score"
+          style={{ padding: "0.75rem", borderRadius: "6px", marginRight: "0.5rem", background: "#1c1c1c", color: "#fff", border: "1px solid #333" }}
+        />
         <button
-          onClick={handleSolve}
-          style={{
-            backgroundColor: "#FF5C00",
-            color: "#fff",
-            border: "none",
-            padding: "1rem 2rem",
-            fontSize: "1rem",
-            borderRadius: "8px",
-            cursor: "pointer",
-          }}
+          onClick={handleSubmit}
+          style={{ padding: "0.75rem 1.5rem", background: "#FF5C00", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer" }}
         >
-          Solve Puzzle 🔥
+          Submit Score 🔥
         </button>
-      ) : (
-        <div>
-          <p style={{ fontSize: "1.2rem" }}>
-            Congrats! You solved it in <strong>{time}s</strong>.
-          </p>
-          <input
-            placeholder="Enter your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={{ padding: "0.5rem", marginRight: "0.5rem", borderRadius: "6px" }}
-          />
-          <button
-            style={{
-              backgroundColor: "#FF5C00",
-              color: "#fff",
-              border: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-          >
-            Submit 🔥
-          </button>
-        </div>
-      )}
+      </div>
+
+      <h2 style={{ color: "#ff5c00", fontSize: "1.75rem" }}>🔥 Leaderboard</h2>
+      <ol style={{ paddingLeft: "1rem", lineHeight: "2" }}>
+        {leaderboard.map((entry, i) => (
+          <li key={i}>
+            <strong>{entry.name}</strong>: <span style={{ color: "#ffae42" }}>{entry.score}</span>
+            {i === 0 && " 🥇"}
+            {i === 1 && " 🥈"}
+            {i === 2 && " 🥉"}
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
