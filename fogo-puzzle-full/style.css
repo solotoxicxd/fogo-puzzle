@@ -46,3 +46,12 @@ footer {
 @media (max-width: 500px) {
   canvas { width: 90vw; height: 90vw; }
 }
+/* Optional Enhancements */
+button:hover {
+  background: #ff8533;
+  transition: background 0.2s ease-in-out;
+}
+
+canvas {
+  transition: all 0.3s ease;
+}
