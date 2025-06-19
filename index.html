@@ -1,30 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fogo Puzzle 🔥</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <div class="main-screen" id="home-screen">
-    <h1>Can You Master the Flame?</h1>
-    <button id="start-btn">Start Puzzle 🔥</button>
+  <div class="container">
+    <aside class="sidebar">
+      <h1>🔥 Fogo Puzzle</h1>
+      <div class="info">
+        <label for="img_file" class="button">Upload Image</label>
+        <input type="file" id="img_file" accept="image/*" hidden />
+        <div class="size-selector">
+          <label for="size">Size</label>
+          <select id="size">
+            <option value="3">3x3</option>
+            <option value="4">4x4</option>
+            <option value="5">5x5</option>
+          </select>
+        </div>
+        <div class="number-toggle">
+          <label for="checkbox">Show Numbers</label>
+          <input type="checkbox" id="checkbox" />
+        </div>
+        <div class="buttons">
+          <button id="shuffle-btn">🔀 Shuffle</button>
+          <button id="solve-btn">🤖 Solve</button>
+        </div>
+        <div class="moves">Moves: <span>0</span></div>
+      </div>
+    </aside>
+
+    <main class="board-container">
+      <div id="board" class="board"></div>
+    </main>
   </div>
 
-  <div class="main-screen" id="puzzle-screen" style="display:none;">
-    <canvas id="puzzle" width="300" height="300"></canvas>
-    <div id="timer">Time: 0s</div>
-  </div>
-
-  <div class="main-screen" id="end-screen" style="display:none;">
-    <h2 id="message"></h2>
-    <a id="share" href="#" target="_blank">🔥 Share on X</a><br/>
-    <button id="restart-btn">Play Again</button>
-  </div>
-
-  <footer>Made with 🔥 by <a href="https://x.com/bytrizz404" target="_blank">@bytrizz404</a></footer>
-
+  <script src="FastPriorityQueue.js"></script>
+  <script src="boardstate.js"></script>
+  <script src="solver.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
