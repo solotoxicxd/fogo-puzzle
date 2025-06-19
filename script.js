@@ -84,8 +84,23 @@ function isSolved() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   tiles.forEach(t => {
-    ctx.drawImage(img, t.x * tileSize, t.y * tileSize, tileSize, tileSize, t.x * tileSize, t.y * tileSize, tileSize, tileSize);
+    // Calculate the correct crop from the image
+    const sx = t.x * tileSize;
+    const sy = t.y * tileSize;
+    const dx = t.x * tileSize;
+    const dy = t.y * tileSize;
+
+    // Don’t draw the empty tile
+    if (!(t.x === empty.x && t.y === empty.y)) {
+      ctx.drawImage(
+        img,
+        sx, sy, tileSize, tileSize,  // from image
+        dx, dy, tileSize, tileSize   // to canvas
+      );
+    }
   });
+}
+
 }
 
 document.getElementById("start-btn").onclick = () => {
