@@ -10,9 +10,7 @@ let timer = 0;
 let interval;
 let img = new Image();
 
-const moveSfx = new Audio("sounds/move.mp3");
-const shuffleSfx = new Audio("sounds/shuffle.mp3");
-const winSfx = new Audio("sounds/win.mp3");
+const clickSfx = new Audio("sounds/click.mp3");
 
 function loadRandomImage() {
   const random = Math.floor(Math.random() * imageCount) + 1;
@@ -42,22 +40,23 @@ function shuffle() {
   for (let i = 0; i < 100; i++) {
     const moves = getMoves();
     const move = moves[Math.floor(Math.random() * moves.length)];
-    moveTile(move.x, move.y, false);
+    moveTile(move.x, move.y);
   }
-  shuffleSfx.play();
   draw();
 }
 
 function getMoves() {
-  return tiles.filter(t => (Math.abs(t.x - empty.x) === 1 && t.y === empty.y) || (Math.abs(t.y - empty.y) === 1 && t.x === empty.x));
+  return tiles.filter(t => 
+    (Math.abs(t.x - empty.x) === 1 && t.y === empty.y) || 
+    (Math.abs(t.y - empty.y) === 1 && t.x === empty.x)
+  );
 }
 
-function moveTile(x, y, playSound = true) {
+function moveTile(x, y) {
   const i = tiles.findIndex(t => t.x === x && t.y === y);
   if (i > -1) {
     [tiles[i].x, empty.x] = [empty.x, tiles[i].x];
     [tiles[i].y, empty.y] = [empty.y, tiles[i].y];
-    if (playSound) moveSfx.play();
   }
 }
 
@@ -69,19 +68,11 @@ canvas.addEventListener("click", e => {
   draw();
   if (isSolved()) {
     clearInterval(interval);
-    winSfx.play();
-    const rank = getRank(timer);
     document.getElementById("puzzle-screen").style.display = "none";
     document.getElementById("end-screen").style.display = "flex";
-    document.getElementById("message").innerText = `${rank.roast}
-Time: ${timer}s
-Rank: ${rank.title}`;
-    const text = `I solved the Fogo Puzzle in ${timer}s 🔥
-Rank: ${rank.title}
-${rank.roast}
-
-Try it: https://fogopuzzle.vercel.app
-by @bytrizz404`;
+    const rank = getRank(timer);
+    document.getElementById("message").innerText = `${rank.roast}\nTime: ${timer}s\nRank: ${rank.title}`;
+    const text = `I solved the Fogo Puzzle in ${timer}s 🔥\nRank: ${rank.title}\n${rank.roast}\n\nTry it: https://fogopuzzle.vercel.app\nby @bytrizz404`;
     document.getElementById("share").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
   }
 });
@@ -98,6 +89,7 @@ function draw() {
 }
 
 document.getElementById("start-btn").onclick = () => {
+  clickSfx.play();
   document.getElementById("home-screen").style.display = "none";
   document.getElementById("puzzle-screen").style.display = "flex";
   document.getElementById("timer").innerText = "Time: 0s";
@@ -107,6 +99,11 @@ document.getElementById("start-btn").onclick = () => {
     document.getElementById("timer").innerText = `Time: ${timer}s`;
   }, 1000);
   loadRandomImage();
+};
+
+document.getElementById("restart-btn").onclick = () => {
+  clickSfx.play();
+  location.reload();
 };
 
 img.onload = () => initTiles();
