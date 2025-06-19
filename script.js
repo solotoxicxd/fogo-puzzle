@@ -32,7 +32,7 @@ function initTiles() {
       tiles.push({ x, y });
     }
   }
-  tiles.pop();
+  tiles.pop(); // remove last tile (empty)
   shuffle();
 }
 
@@ -46,8 +46,8 @@ function shuffle() {
 }
 
 function getMoves() {
-  return tiles.filter(t => 
-    (Math.abs(t.x - empty.x) === 1 && t.y === empty.y) || 
+  return tiles.filter(t =>
+    (Math.abs(t.x - empty.x) === 1 && t.y === empty.y) ||
     (Math.abs(t.y - empty.y) === 1 && t.x === empty.x)
   );
 }
@@ -83,14 +83,12 @@ function isSolved() {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  tiles.forEach(t => {
-    // Calculate the correct crop from the image
-    const sx = t.x * tileSize;
-    const sy = t.y * tileSize;
+  tiles.forEach((t, i) => {
+    const sx = (i % size) * tileSize;
+    const sy = Math.floor(i / size) * tileSize;
     const dx = t.x * tileSize;
     const dy = t.y * tileSize;
 
-    // Don’t draw the empty tile
     if (!(t.x === empty.x && t.y === empty.y)) {
       ctx.drawImage(
         img,
@@ -99,8 +97,6 @@ function draw() {
       );
     }
   });
-}
-
 }
 
 document.getElementById("start-btn").onclick = () => {
